@@ -18,7 +18,6 @@ function arrToB64(arr) {
 async function tryAPL(state) {
 	response = await fetch("https://tryapl.org/Exec", {
 		method: "POST",
-		credentials: 'include',
 		headers: {
 			"Content-Type": "application/json;charset=utf-8"
 		},
@@ -38,7 +37,7 @@ async function TIO(code, input, lang) {
 	response = await fetch("https://tio.run/cgi-bin/run/api/", {
 		method: "POST",
 		headers: {
-			"Content-Type": "application/json;charset=utf-8"
+			"Content-Type": "text/plain;charset=utf-8"
 		},
 		body: rBody
 	});
@@ -59,7 +58,7 @@ async function executeAPL(head, code, foot, runner, lang, input) {
 	}
 	else {
 		expr = head + "\n" + code + "\n" + foot;
-		return TIO(expr, input, lang);
+		return await TIO(expr, input, lang);
 	}
 }
 
@@ -181,6 +180,7 @@ window.addEventListener('DOMContentLoaded', (event) => {
 				promise = await executeAPL(head.value, "\n∇f\n" + code.value.trim() + "\n∇", foot.value, runner, tioLang, input);
 			}
 		}
-		out.innerHTML = promise.join("\n");
+		console.log(promise.body.toString);
+		// out.innerHTML = promise.join("\n");
 	});
 });
