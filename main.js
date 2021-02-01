@@ -1,3 +1,18 @@
+// courtesy of dzaima
+function deflate(arr) {
+	return pako.deflateRaw(arr, { "level": 9 });
+}
+
+function encode(str) {
+	let bytes = new TextEncoder("utf-8").encode(str);
+	return arrToB64(deflate(bytes));
+}
+
+function arrToB64(arr) {
+	var bytestr = "";
+	arr.forEach(c => bytestr += String.fromCharCode(c));
+	return btoa(bytestr).replace(/\+/g, "@").replace(/=+/, "");
+}
 
 // From the TryAPL docs
 async function tryAPL(state) {
@@ -11,29 +26,38 @@ async function tryAPL(state) {
 	return response.json()
 }
 async function TIO(code, input, lang) {
-	const encoder = new TextEncoder();
-	let length = encoder.encode(state.code).length;
+	const encoder = new TextEncoder("utf-8");
+	let length = encoder.encode(code).length;
+	let iLength = encoder.encode(input).length;
+	//  Vlang\u00001\u0000{language}\u0000F.code.tio\u0000{# of bytes in code}\u0000{code}F.input.tio\u0000{length of input}\u0000{input}Vargs\u0000{number of ARGV}{ARGV}\u0000R
+	let rBody = "Vlang\x001\x00" + lang + "\x00F.code.tio\x00" + length + "\x00" + code + "F.input.tio\x00" + iLength + "\x00" + input + "Vargs\x000\x00R";
+	console.log(rBody)
+	rBody = encode(rBody);
+	console.log(rBody);
 	response = await fetch("https://tio.run/cgi-bin/run/api/", {
 		method: "POST",
 		headers: {
 			"Content-Type": "application/json;charset=utf-8"
 		},
-		body: "Vlang\x001\x00" + lang + "\x00F.code.tio\x00" + length + "\x00" + code + "F.input.tio" + input + "Vargs\x000\x00R"
-	})
-	return response.json()
+		body: rBody
+	});
+	return response
 }
 
 async function executeAPL(head, code, foot, runner, lang, input) {
+	let expr = "";
 	if (runner === "tryAPL") {
+		// spam ⋄ everywhere and hope it works
 		head = head.replace("\n", "⋄");
 		foot = foot.replace("\n", "⋄");
-		expr = head + code + foot;
+		expr = [head, code, foot].join("⋄");
 		let state = ["", 0, "", expr];
 		console.log(state);
 		result = await tryAPL(state);
 		return result[3];
 	}
 	else {
+		expr = head + "\n" + code + "\n" + foot;
 		return TIO(expr, input, lang);
 	}
 }
@@ -41,7 +65,7 @@ async function executeAPL(head, code, foot, runner, lang, input) {
 window.addEventListener('DOMContentLoaded', (event) => {
 	// Globals:
 	let sidebar = document.getElementById("sidebar"); //Options menu
-	let runner = "tio"; // default runner
+	let runner = "tryAPL"; // default runner
 	let mode = "dfn"; //default mode
 	let tioLang = "apl-dyalog";
 
@@ -92,12 +116,61 @@ window.addEventListener('DOMContentLoaded', (event) => {
 		});
 	});
 
+	// Change runner site
+	document.querySelectorAll(".runner").forEach((item) => {
+		item.addEventListener('click', (event) => {
+			let targ = document.getElementById("picker");
+			let runner = item.value;
+			console.log(runner);
+			if (runner === "tryAPL") {
+				picker.style.display = "none";
+			}
+			else if (runner === "tio") {
+				picker.style.display = "block";
+			}
+		});
+	});
+
+	// Change language
+	document.querySelectorAll(".pick").forEach((item) => {
+		item.addEventListener('click', (event) => {
+			tioLang = item.value;
+			console.log(tioLang);
+		});
+	});
+
+	// Change submission type
+	document.querySelectorAll(".sub").forEach((item) => {
+		item.addEventListener('click', (event) => {
+			mode = item.value;
+			console.log(mode);
+			if (mode === "dfn") {
+				document.getElementById("mode").innerHTML = "Function";
+			}
+			else {
+				document.getElementById("mode").innerHTML = "Full Program";
+			}
+
+		});
+	});
+
+	code.addEventListener("keydown", (event) => {
+		document.getElementById("count").innerHTML = code.value.length;
+	});
+
 	// run APL code on click
 	document.getElementById("run").addEventListener('click', async (event) => {
 		let input = inp.value;
 		let promise = "";
 		if (mode === "dfn") {
-			promise = await executeAPL(head.value, "⋄⎕FX '" + ("run←" + code.value.trim()).split("\n").join("' '") + "' ''⋄", foot.value, runner, tioLang, input);
+			let trans = code.value;
+			if (trans.indexOf("\n") + 1) {
+				trans = "⋄⎕FX '" + ("run←" + trans.trim()).split("\n").join("' '") + "' ''⋄";
+			}
+			else { // Make it easier for debugging
+				trans = "⋄run←" + trans.trim() + "⋄";
+			}
+			promise = await executeAPL(head.value, trans, foot.value, runner, tioLang, input);
 		}
 		else if (mode === "tradfn") {
 			if (runner === "tryAPL") {

@@ -26,16 +26,39 @@
 		<div class="four columns">
 			<div class="container">
 				<h5>Runner</h5>
+				<div>
+					<label for="tryapl"><input type="radio" name="runner" id="tryapl" class="runner"
+							value="tryAPL"><span class="label-body">tryAPL</span></label>
+					<label for="tio"><input type="radio" name="runner" id="tio" class="runner" value="tio"><span
+							class="label-body">Try It Online!</span></label>
+
+				</div>
+				<div id="picker" style="display: none;">
+					<h5>TIO Language</h5>
+					<select name="language" id="" class="u-full-width">
+						<option class="pick" value="apl-dyalog">Dyalog Unicode</option>
+						<option class="pick" value="apl-dyalog-extended">Dyalog Extended</option>
+						<option class="pick" value="apl-dzaima">dzaima/APL</option>
+					</select>
+
+				</div>
 			</div>
 		</div>
 		<div class="four columns">
 			<div class="container">
 				<h5>Submission Type</h5>
+				<div>
+					<label for="dfn"><input type="radio" name="sub" id="dfn" class="sub" value="dfn"><span
+							class="label-body">Function</span></label>
+					<label for="tradfn"><input type="radio" name="sub" id="tradfn" class="sub" value="tradfn"><span
+							class="label-body">Full Program</span></label>
+				</div>
 			</div>
 		</div>
 		<div class="four columns">
 			<div class="container">
 				<h5>Explanation</h5>
+				<p>To be added.</p>
 			</div>
 		</div>
 	</div>
@@ -45,10 +68,10 @@
 				<h1>APLgolf</h1>
 			</div>
 			<div class="float-right">
+				<button class="button-primary" id="options">Options</button>
 				<a href="#" class="button" id="run">Run</a>
 				<a href="#" class="button" id="">Postify</a>
 				<a href="#" class="button" id="">CMCify</a>
-				<button class="button-primary" id="options">Options</button>
 			</div>
 		</div>
 	</div>
@@ -61,7 +84,7 @@
 	<div class="twelve columns">
 		<div class="nav">
 			<h5>Code <span class="arrow" data-hide="code">∇</span></h5>
-			<div class="attrs"><span id="mode">function</span> submission, <span id="count">0</span> bytes</div>
+			<div class="attrs"><span id="mode">Function</span> submission, <span id="count">0</span> bytes(SBCS)</div>
 		</div>
 
 		<textarea name="" id="code" rows="1" class="u-full-width"></textarea>

@@ -11,7 +11,7 @@ h5 {
 		-o-user-select: none;
 }
 
-h5:hover {
+.twelve h5:hover {
 	color: #fff;
 	cursor: pointer;
 }
@@ -37,3 +37,4 @@ textarea {
 .float-right > * {
 	float:right;
 }
+
