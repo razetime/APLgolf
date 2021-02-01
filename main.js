@@ -180,7 +180,7 @@ window.addEventListener('DOMContentLoaded', (event) => {
 				promise = await executeAPL(head.value, "\n∇f\n" + code.value.trim() + "\n∇", foot.value, runner, tioLang, input);
 			}
 		}
-		console.log(promise.body.toString);
+		console.log(promise);
 		// out.innerHTML = promise.join("\n");
 	});
 });
