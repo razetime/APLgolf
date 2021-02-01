@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>APLgolf</title>
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/skeleton/2.0.4/skeleton.min.css"
+		integrity="sha512-EZLkOqwILORob+p0BXZc+Vm3RgJBOe1Iq/0fiI7r/wJgzOFZMlsqTa29UEl6v6U6gsV4uIpsNZoV32YZqrCRCQ=="
+		crossorigin="anonymous" />
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/pako/2.0.3/pako.min.js"
+		integrity="sha512-yJSo0YTQvvGOqL2au5eH0W4K/0FI0sTJuyHjiHkh0O31Lzlb814P0fDXtuEtzOj13lOBZ9j99BjqFx4ASz9pGA=="
+		crossorigin="anonymous"></script>
+	<link rel="stylesheet" href="dark-theme.css">
+	<link rel="stylesheet" href="style.css">
+
+
+
+	<script src="main.js"></script>
+
+</head>
+
+<body>
+	<div id="sidebar" class="row" style="display:none;">
+		<!-- TODO -->
+		<div class="four columns">
+			<div class="container">
+				<h5>Runner</h5>
+			</div>
+		</div>
+		<div class="four columns">
+			<div class="container">
+				<h5>Submission Type</h5>
+			</div>
+		</div>
+		<div class="four columns">
+			<div class="container">
+				<h5>Explanation</h5>
+			</div>
+		</div>
+	</div>
+	<div class="row">
+		<div class="twelve columns nav">
+			<div>
+				<h1>APLgolf</h1>
+			</div>
+			<div class="float-right">
+				<a href="#" class="button" id="run">Run</a>
+				<a href="#" class="button" id="">Postify</a>
+				<a href="#" class="button" id="">CMCify</a>
+				<button class="button-primary" id="options">Options</button>
+			</div>
+		</div>
+	</div>
+	<div class="row">
+		<div class="twelve columns">
+			<h5>Header <span class="arrow" data-hide="head">∇</span></h5>
+			<textarea name="" id="head" rows="1" class="u-full-width"></textarea>
+		</div>
+	</div>
+	<div class="twelve columns">
+		<div class="nav">
+			<h5>Code <span class="arrow" data-hide="code">∇</span></h5>
+			<div class="attrs"><span id="mode">function</span> submission, <span id="count">0</span> bytes</div>
+		</div>
+
+		<textarea name="" id="code" rows="1" class="u-full-width"></textarea>
+	</div>
+	<div class="twelve columns">
+		<h5>Footer <span class="arrow" data-hide="foot">∇</span></h5>
+		<textarea name="" id="foot" rows="1" class="u-full-width"></textarea>
+	</div>
+	<div class="twelve columns">
+		<h5>Input <span class="arrow" data-hide="input">∇</span></h5>
+		<textarea name="" id="input" rows="1" class="u-full-width"></textarea>
+	</div>
+	<div class="twelve columns">
+		<h5>Output <span class="arrow" data-hide="out">∇</span></h5>
+		<pre id="out"><code id="output">Output and links will appear here.</code></pre>
+	</div>
+	<div class="twelve columns"></div>
+
+</body>
+
+</html>

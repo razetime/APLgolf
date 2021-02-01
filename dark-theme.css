@@ -1,0 +1,120 @@
+@font-face {
+	font-family: 'APL386';
+	src: url('APL386.ttf');
+}
+body {
+	font-family: 'APL386', monospace;
+    color: #d3d7cf;
+    background: #0d1117;
+}
+
+/* Links */
+
+a {
+    color: #729fcf;
+}
+a:hover {
+    color: #eeeeec;
+}
+
+/* Buttons */
+
+.button,
+button,
+input[type="submit"],
+input[type="reset"],
+input[type="button"] {
+    color: #d3d7cf;
+    border: 1px solid #babdb6;
+}
+
+.button:hover,
+button:hover,
+input[type="submit"]:hover,
+input[type="reset"]:hover,
+input[type="button"]:hover,
+.button:focus,
+button:focus,
+input[type="submit"]:focus,
+input[type="reset"]:focus,
+input[type="button"]:focus {
+    color: #eeeeec;
+    border: 1px solid #eeeeec;
+}
+
+.button.button-primary,
+button.button-primary,
+input[type="submit"].button-primary,
+input[type="reset"].button-primary,
+input[type="button"].button-primary {
+    color: #2e3436;
+    background-color: #ddd;
+    border-color: #ddd;
+}
+
+.button.button-primary:hover,
+button.button-primary:hover,
+input[type="submit"].button-primary:hover,
+input[type="reset"].button-primary:hover,
+input[type="button"].button-primary:hover,
+.button.button-primary:focus,
+button.button-primary:focus,
+input[type="submit"].button-primary:focus,
+input[type="reset"].button-primary:focus,
+input[type="button"].button-primary:focus {
+    color: #2e3436;
+    background-color: rgb(205, 204, 250);
+    border-color:rgb(205, 204, 250);
+}
+
+/* Forms */
+
+input[type="email"],
+input[type="number"],
+input[type="search"],
+input[type="text"],
+input[type="tel"],
+input[type="url"],
+input[type="password"],
+textarea,
+select,pre,code {
+    background-color: #0c1016;
+	border: 1px solid #babdb6;
+	color: #d3d7cf;
+	font-family: 'APL386', monospace;
+
+}
+
+input[type="email"]:focus,
+input[type="number"]:focus,
+input[type="search"]:focus,
+input[type="text"]:focus,
+input[type="tel"]:focus,
+input[type="url"]:focus,
+input[type="password"]:focus,
+textarea:focus,
+select:focus {
+    border: 1px solid #ccc;
+}
+
+/* Code */
+
+code {
+    color: #fff;
+    background: #0d1116;
+    border: #555753;
+}
+
+/* Tables */
+
+td {
+    border-bottom: 1px solid #eeeeec;
+}
+
+button, .button {
+	font-family: 'APL386', monospace;
+	text-transform: none;
+	border-radius: 0;
+	font-weight: normal;
+	font-size: 14px;
+}
