@@ -1,4 +1,4 @@
-// courtesy of dzaima
+// Following three functions are courtesy of dzaima
 function deflate(arr) {
 	return pako.deflateRaw(arr, { "level": 9 });
 }
@@ -18,6 +18,7 @@ function arrToB64(arr) {
 async function tryAPL(state) {
 	response = await fetch("https://tryapl.org/Exec", {
 		method: "POST",
+		credentials: 'include',
 		headers: {
 			"Content-Type": "application/json;charset=utf-8"
 		},
@@ -119,8 +120,7 @@ window.addEventListener('DOMContentLoaded', (event) => {
 	// Change runner site
 	document.querySelectorAll(".runner").forEach((item) => {
 		item.addEventListener('click', (event) => {
-			let targ = document.getElementById("picker");
-			let runner = item.value;
+			runner = item.value;
 			console.log(runner);
 			if (runner === "tryAPL") {
 				picker.style.display = "none";
@@ -154,6 +154,7 @@ window.addEventListener('DOMContentLoaded', (event) => {
 		});
 	});
 
+	//byte counting
 	code.addEventListener("keydown", (event) => {
 		document.getElementById("count").innerHTML = code.value.length;
 	});
