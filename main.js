@@ -95,6 +95,9 @@ window.addEventListener('DOMContentLoaded', (event) => {
 	funcName = decodeURIComponent(urlParams.get("n") || "f");
 	document.getElementById("fname").value = funcName;
 	document.getElementById("count").innerHTML = code.value.length;
+	if (runner === "tio") {
+		inp.style.display = "block";
+	}
 
 
 	// Textarea auto-sizing
