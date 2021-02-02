@@ -16,10 +16,9 @@ h5 {
 	cursor: pointer;
 }
 
-textarea {
-	min-height: 1rem;
-}
-
+#output, #out {
+overflow-x: hidden;
+ }
 .attrs {
 	font-size: 1.5rem;
 }

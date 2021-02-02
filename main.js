@@ -103,7 +103,7 @@ window.addEventListener('DOMContentLoaded', (event) => {
 	}
 	function OnInput() {
 		this.style.height = 'auto';
-		this.style.height = (this.scrollHeight + 5) + 'px';
+		this.style.height = this.scrollHeight + 'px';
 	}
 
 	// Options menu show/hide
@@ -254,6 +254,8 @@ A ${mode} submission which ____.
 
 	// run APL code on click
 	document.getElementById("run").addEventListener('click', async (event) => {
+		document.getElementById("run").innerHTML = "Running";
+		document
 		let input = inp.value;
 		let promise = "";
 		if (mode === "dfn") {
