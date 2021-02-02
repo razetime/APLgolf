@@ -91,6 +91,7 @@ window.addEventListener('DOMContentLoaded', (event) => {
 	runner = decodeURIComponent(urlParams.get("r") || "");
 	tioLang = decodeURIComponent(urlParams.get("l") || "");
 	mode = decodeURIComponent(urlParams.get("m") || "dfn");
+	document.getElementById("mode").innerHTML = mode;
 	funcName = decodeURIComponent(urlParams.get("n") || "f");
 	document.getElementById("fname").value = funcName;
 
@@ -248,7 +249,7 @@ A ${mode} submission which ____.
 	});
 
 	document.getElementById("cmcify").addEventListener('click', (event) => {
-		let e = (x) => decodeURIComponent(x);
+		let e = (x) => encodeURIComponent(x);
 		let link = encodeURI(location.protocol + '//' + location.host + location.pathname + "?h=" + e(head.value) + "&c=" + e(code.value) + "&f=" + e(foot.value) + "&i=" + e(inp.value) + "&r=" + e(runner) + "&l=" + e(tioLang) + "&m=" + e(mode) + "&n=" + e(funcName));
 		console.log(link);
 		history.pushState({}, null, link);
