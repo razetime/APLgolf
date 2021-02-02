@@ -2,6 +2,9 @@
 function deflate(arr) {
 	return pako.deflateRaw(arr, { "level": 9 });
 }
+function inflate(arr) {
+	return pako.inflateRaw(arr);
+}
 
 function encode(str) {
 	let bytes = new TextEncoder("utf-8").encode(str);
@@ -12,6 +15,9 @@ function arrToB64(arr) {
 	var bytestr = "";
 	arr.forEach(c => bytestr += String.fromCharCode(c));
 	return btoa(bytestr).replace(/\+/g, "@").replace(/=+/, "");
+}
+function b64ToArr(str) {
+	return new Uint8Array([...atob(decodeURIComponent(str).replace(/@/g, "+"))].map(c => c.charCodeAt()))
 }
 
 // From the TryAPL docs
@@ -84,15 +90,17 @@ window.addEventListener('DOMContentLoaded', (event) => {
 	let out = document.getElementById("output");
 	let inpdiv = document.getElementById("inp-div");
 
-	head.value = decodeURIComponent(urlParams.get("h") || "");
-	code.value = decodeURIComponent(urlParams.get("c") || "");
-	foot.value = decodeURIComponent(urlParams.get("f") || "");
-	inp.value = decodeURIComponent(urlParams.get("i") || "");
-	runner = decodeURIComponent(urlParams.get("r") || "");
-	tioLang = decodeURIComponent(urlParams.get("l") || "");
-	mode = decodeURIComponent(urlParams.get("m") || "dfn");
+	let d = x => decodeURIComponent(x);
+	let cd = x => new TextDecoder("utf-8").decode(inflate(b64ToArr(d(x))));
+	head.value = cd(urlParams.get("h") || "");
+	code.value = cd(urlParams.get("c") || "");
+	foot.value = cd(urlParams.get("f") || "");
+	inp.value = cd(urlParams.get("i") || "");
+	runner = d(urlParams.get("r") || "");
+	tioLang = d(urlParams.get("l") || "");
+	mode = d(urlParams.get("m") || "dfn");
 	document.getElementById("mode").innerHTML = mode;
-	funcName = decodeURIComponent(urlParams.get("n") || "f");
+	funcName = d(urlParams.get("n") || "f");
 	document.getElementById("fname").value = funcName;
 	document.getElementById("count").innerHTML = code.value.length;
 	if (runner === "tio") {
@@ -216,7 +224,8 @@ window.addEventListener('DOMContentLoaded', (event) => {
 
 	document.getElementById("postify").addEventListener('click', (event) => {
 		let e = (x) => decodeURIComponent(x);
-		let link = encodeURI(location.protocol + '//' + location.host + location.pathname + "?h=" + e(head.value) + "&c=" + e(code.value) + "&f=" + e(foot.value) + "&i=" + e(inp.value) + "&r=" + e(runner) + "&l=" + e(tioLang) + "&m=" + e(mode) + "&n=" + e(funcName));
+		let ce = (x) => arrToB64(deflate(e(x)));
+		let link = encodeURI(location.protocol + '//' + location.host + location.pathname + "?h=" + ce(head.value) + "&c=" + ce(code.value) + "&f=" + ce(foot.value) + "&i=" + ce(inp.value) + "&r=" + e(runner) + "&l=" + e(tioLang) + "&m=" + e(mode) + "&n=" + e(funcName));
 		console.log(link);
 		history.pushState({}, null, link);
 		let postLang = "Dyalog Unicode";
@@ -253,8 +262,9 @@ A ${mode} submission which ____.
 	});
 
 	document.getElementById("cmcify").addEventListener('click', (event) => {
-		let e = (x) => encodeURIComponent(x);
-		let link = encodeURI(location.protocol + '//' + location.host + location.pathname + "?h=" + e(head.value) + "&c=" + e(code.value) + "&f=" + e(foot.value) + "&i=" + e(inp.value) + "&r=" + e(runner) + "&l=" + e(tioLang) + "&m=" + e(mode) + "&n=" + e(funcName));
+		let e = (x) => d(x);
+		let ce = (x) => arrToB64(deflate(e(x)));
+		let link = encodeURI(location.protocol + '//' + location.host + location.pathname + "?h=" + ce(head.value) + "&c=" + ce(code.value) + "&f=" + ce(foot.value) + "&i=" + ce(inp.value) + "&r=" + e(runner) + "&l=" + e(tioLang) + "&m=" + e(mode) + "&n=" + e(funcName));
 		console.log(link);
 		history.pushState({}, null, link);
 		out.innerText = `APL, [${document.getElementById("count").innerHTML} bytes](${window.location.href}): \`${code.value}\``;
