@@ -67,6 +67,9 @@ async function executeAPL(head, code, foot, runner, lang, input) {
 
 window.addEventListener('DOMContentLoaded', (event) => {
 	// Globals:
+	const queryString = window.location.search;
+	console.log(queryString);
+	const urlParams = new URLSearchParams(queryString);
 	let sidebar = document.getElementById("sidebar"); //Options menu
 	let runner = "tryAPL"; // default runner
 	let mode = "dfn"; //default mode
@@ -80,6 +83,17 @@ window.addEventListener('DOMContentLoaded', (event) => {
 	let inp = document.getElementById("input");
 	let out = document.getElementById("output");
 	let inpdiv = document.getElementById("inp-div");
+
+	head.value = decodeURIComponent(urlParams.get("h") || "");
+	code.value = decodeURIComponent(urlParams.get("c") || "");
+	foot.value = decodeURIComponent(urlParams.get("f") || "");
+	inp.value = decodeURIComponent(urlParams.get("i") || "");
+	runner = decodeURIComponent(urlParams.get("r") || "");
+	tioLang = decodeURIComponent(urlParams.get("l") || "");
+	mode = decodeURIComponent(urlParams.get("m") || "dfn");
+	funcName = decodeURIComponent(urlParams.get("n") || "f");
+	document.getElementById("fname").value = funcName;
+
 
 	// Textarea auto-sizing
 	const tx = document.getElementsByTagName('textarea');
@@ -137,6 +151,18 @@ window.addEventListener('DOMContentLoaded', (event) => {
 			}
 		});
 	});
+	// to remedy autofill
+	if (document.getElementById("tryapl").checked) {
+		picker.style.display = "none";
+		inpdiv.style.display = "none";
+		runner = "tryAPL";
+	}
+	else {
+		picker.style.display = "block";
+		inpdiv.style.display = "block";
+		inp.style.height = head.style.height;
+		runner = "tio";
+	}
 
 	// Change language
 	document.querySelectorAll(".pick").forEach((item) => {
@@ -144,6 +170,9 @@ window.addEventListener('DOMContentLoaded', (event) => {
 			tioLang = item.value;
 			console.log(tioLang);
 		});
+		if (item.selected === "selected") {
+			tioLang = item.value;
+		}
 	});
 
 	// Change submission type
@@ -161,10 +190,67 @@ window.addEventListener('DOMContentLoaded', (event) => {
 		});
 	});
 
+	// PRevent autocomplete
+	document.querySelectorAll(".no-auto").forEach((item) => {
+		item.autocomplete = "off";
+	});
+
 	//byte counting
 	code.addEventListener("keydown", (event) => {
 		document.getElementById("count").innerHTML = code.value.length;
 	});
+
+	// Function name
+	document.getElementById("fname").onchange = (event) => {
+		funcName = document.getElementById("fname").value;
+		console.log(funcName);
+	};
+
+	document.getElementById("postify").addEventListener('click', (event) => {
+		let e = (x) => decodeURIComponent(x);
+		let link = encodeURI(location.protocol + '//' + location.host + location.pathname + "?h=" + e(head.value) + "&c=" + e(code.value) + "&f=" + e(foot.value) + "&i=" + e(inp.value) + "&r=" + e(runner) + "&l=" + e(tioLang) + "&m=" + e(mode) + "&n=" + e(funcName));
+		console.log(link);
+		history.pushState({}, null, link);
+		let postLang = "Dyalog Unicode";
+		let postLink = "https://dyalog.com";
+		if (runner === "tio") {
+			switch (tioLang) {
+				case "apl-dyalog":
+					postLang = "Dyalog Unicode";
+					postLink = "https://dyalog.com";
+					break;
+				case "apl-dyalog-extended":
+					postLang = "Dyalog Extended";
+					postLink = "https://github.com/abrudz/dyalog-apl-extended";
+					break;
+				case "apl-dzaima":
+					postLang = "dzaima/APL";
+					postLink = "https://github.com/dzaima/APL/";
+					break;
+			}
+		}
+
+		let post = `# [APL(${postLang})][1], <sup><s></s></sup>${document.getElementById("count").innerHTML} bytes <sup>[SBCS][2]</sup>
+\`\`\`
+${code.value}
+\`\`\`
+[Try it on golfAPL!](${window.location.href})
+
+A ${mode} submission which ____.
+
+[1]: ${postLink}
+[2]: https://github.com/abrudz/SBCS
+`;
+		out.innerText = post;
+	});
+
+	document.getElementById("cmcify").addEventListener('click', (event) => {
+		let e = (x) => decodeURIComponent(x);
+		let link = encodeURI(location.protocol + '//' + location.host + location.pathname + "?h=" + e(head.value) + "&c=" + e(code.value) + "&f=" + e(foot.value) + "&i=" + e(inp.value) + "&r=" + e(runner) + "&l=" + e(tioLang) + "&m=" + e(mode) + "&n=" + e(funcName));
+		console.log(link);
+		history.pushState({}, null, link);
+		out.innerText = `[APL, ${document.getElementById("count").innerHTML} bytes](${window.location.href})`;
+	})
 
 	// run APL code on click
 	document.getElementById("run").addEventListener('click', async (event) => {
@@ -186,7 +272,7 @@ window.addEventListener('DOMContentLoaded', (event) => {
 				promise = await executeAPL(head.value, code.value.trim().replace("\n", "⋄"), foot.value, runner, tioLang, input);
 			}
 			else {
-				promise = await executeAPL(head.value, "\n∇f\n" + code.value.trim() + "\n∇", foot.value, runner, tioLang, input);
+				promise = await executeAPL(head.value, "\n∇" + funcName + "\n" + code.value.trim() + "\n∇", foot.value, runner, tioLang, input);
 			}
 		}
 		out.innerHTML = promise.join("\n");

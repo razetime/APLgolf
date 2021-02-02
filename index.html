@@ -27,18 +27,18 @@
 			<div class="container">
 				<h5>Runner</h5>
 				<div>
-					<label for="tryapl"><input type="radio" name="runner" id="tryapl" class="runner" value="tryAPL"
-							checked="checked"><span class="label-body">tryAPL</span></label>
-					<label for="tio"><input type="radio" name="runner" id="tio" class="runner" value="tio"><span
+					<label for="tryapl"><input type="radio" name="runner" id="tryapl" class="runner no-auto"
+							value="tryAPL" checked="checked"><span class="label-body">tryAPL</span></label>
+					<label for="tio"><input type="radio" name="runner" id="tio" class="runner no-auto" value="tio"><span
 							class="label-body">Try It Online!</span></label>
 
 				</div>
 				<div id="picker" style="display: none;">
 					<h5>TIO Language</h5>
 					<select name="language" id="" class="u-full-width">
-						<option class="pick" value="apl-dyalog">Dyalog Unicode</option>
-						<option class="pick" value="apl-dyalog-extended">Dyalog Extended</option>
-						<option class="pick" value="apl-dzaima">dzaima/APL</option>
+						<option class="pick no-auto" value="apl-dyalog" selected="selected">Dyalog Unicode</option>
+						<option class="pick no-auto" value="apl-dyalog-extended">Dyalog Extended</option>
+						<option class="pick no-auto" value="apl-dzaima">dzaima/APL</option>
 					</select>
 
 				</div>
@@ -48,14 +48,14 @@
 			<div class="container">
 				<h5>Submission Type</h5>
 				<div>
-					<label for="dfn"><input type="radio" name="sub" id="dfn" class="sub" value="dfn"
+					<label for="dfn"><input type="radio" name="sub" id="dfn" class="sub no-auto" value="dfn"
 							checked="checked"><span class="label-body">Function</span></label>
-					<label for="tradfn"><input type="radio" name="sub" id="tradfn" class="sub" value="tradfn"><span
-							class="label-body">Full Program</span></label>
+					<label for="tradfn"><input type="radio" name="sub" id="tradfn" class="sub no-auto"
+							value="tradfn"><span class="label-body">Full Program</span></label>
 				</div>
 				<h5>Function/Program Name</h5>
 				<div>
-					<input type="text" id="">
+					<input type="text" id="fname">
 				</div>
 			</div>
 		</div>
@@ -74,8 +74,8 @@
 			<div class="float-right">
 				<button class="button-primary" id="options">Options</button>
 				<a href="#" class="button" id="run">Run</a>
-				<a href="#" class="button" id="">Postify</a>
-				<a href="#" class="button" id="">CMCify</a>
+				<a href="#" class="button" id="postify">Postify</a>
+				<a href="#" class="button" id="cmcify">CMCify</a>
 			</div>
 		</div>
 	</div>
@@ -98,7 +98,7 @@
 		<textarea name="" id="foot" rows="1" class="u-full-width"></textarea>
 	</div>
 	<div class="twelve columns" id="inp-div" style="display: none;">
-		<h5>Input (TIO only)<span class="arrow" data-hide="input">∇</span></h5>
+		<h5>Input(TIO only) <span class="arrow" data-hide="input">∇</span></h5>
 		<textarea name="" id="input" rows="1" class="u-full-width"></textarea>
 	</div>
 	<div class="twelve columns">
