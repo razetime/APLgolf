@@ -183,8 +183,11 @@ window.addEventListener('DOMContentLoaded', (event) => {
 			if (mode === "dfn") {
 				document.getElementById("mode").innerHTML = "Function";
 			}
-			else {
+			else if (mode === "tradfn") {
 				document.getElementById("mode").innerHTML = "Full Program";
+			}
+			else {
+				document.getElementById("mode").innerHTML = "Function Train";
 			}
 
 		});
@@ -252,9 +255,12 @@ A ${mode} submission which ____.
 		out.innerText = `APL, [${document.getElementById("count").innerHTML} bytes](${window.location.href}): \`${code.value}\``;
 	})
 
+	let runBtn = document.getElementById("run");
 	// run APL code on click
-	document.getElementById("run").addEventListener('click', async (event) => {
-		document.getElementById("run").innerHTML = "Running";
+	runBtn.addEventListener('click', async (event) => {
+		runBtn.innerHTML = "Running";
+		runBtn.style.cursor = "wait";
+		runBtn.style.pointerEvents = "none";
 		document
 		let input = inp.value;
 		let promise = "";
@@ -277,7 +283,18 @@ A ${mode} submission which ____.
 				promise = await executeAPL(head.value, "\n∇" + funcName + "\n" + code.value.trim() + "\n∇", foot.value, runner, tioLang, input);
 			}
 		}
-		document.getElementById("run").innerHTML = "Run";
+		else if (mode === "train") {
+			if (runner === "tryAPL") {
+				promise = await executeAPL(head.value, '⋄' + funcName + '←' + code.value + '⋄', foot.value, runner, tioLang, input);
+			}
+			else {
+				promise = await executeAPL(head.value, '\n' + funcName + '←' + code.value + '\n', foot.value, runner, tioLang, input);
+			}
+		}
+
 		out.innerHTML = promise.join("\n");
+		runBtn.innerHTML = "Run";
+		runBtn.style.cursor = "pointer";
+		runBtn.style.pointerEvents = "auto";
 	});
 });
