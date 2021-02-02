@@ -5,7 +5,7 @@ function deflate(arr) {
 
 function encode(str) {
 	let bytes = new TextEncoder("utf-8").encode(str);
-	return arrToB64(deflate(bytes));
+	return deflate(bytes);
 }
 
 function arrToB64(arr) {
@@ -23,26 +23,29 @@ async function tryAPL(state) {
 		},
 		body: JSON.stringify(state)
 	})
-	return response.json()
+	return response.json();
 }
+
 async function TIO(code, input, lang) {
 	const encoder = new TextEncoder("utf-8");
 	let length = encoder.encode(code).length;
 	let iLength = encoder.encode(input).length;
 	//  Vlang\u00001\u0000{language}\u0000F.code.tio\u0000{# of bytes in code}\u0000{code}F.input.tio\u0000{length of input}\u0000{input}Vargs\u0000{number of ARGV}{ARGV}\u0000R
 	let rBody = "Vlang\x001\x00" + lang + "\x00F.code.tio\x00" + length + "\x00" + code + "F.input.tio\x00" + iLength + "\x00" + input + "Vargs\x000\x00R";
-	console.log(rBody)
 	rBody = encode(rBody);
-	console.log(rBody);
-	response = await fetch("https://tio.run/cgi-bin/run/api/", {
+	let fetched = await fetch("https://tio.run/cgi-bin/run/api/", {
 		method: "POST",
 		headers: {
 			"Content-Type": "text/plain;charset=utf-8"
 		},
 		body: rBody
 	});
-	return response
+	let read = (await fetched.body.getReader().read()).value;
+	let text = new TextDecoder('utf-8').decode(read);
+	return text.slice(16).split(text.slice(0, 16));
 }
+
+
 
 async function executeAPL(head, code, foot, runner, lang, input) {
 	let expr = "";
@@ -68,6 +71,7 @@ window.addEventListener('DOMContentLoaded', (event) => {
 	let runner = "tryAPL"; // default runner
 	let mode = "dfn"; //default mode
 	let tioLang = "apl-dyalog";
+	let funcName = "f";
 
 	// code input and output
 	let code = document.getElementById("code");
@@ -75,6 +79,7 @@ window.addEventListener('DOMContentLoaded', (event) => {
 	let foot = document.getElementById("foot");
 	let inp = document.getElementById("input");
 	let out = document.getElementById("output");
+	let inpdiv = document.getElementById("inp-div");
 
 	// Textarea auto-sizing
 	const tx = document.getElementsByTagName('textarea');
@@ -123,9 +128,12 @@ window.addEventListener('DOMContentLoaded', (event) => {
 			console.log(runner);
 			if (runner === "tryAPL") {
 				picker.style.display = "none";
+				inpdiv.style.display = "none";
 			}
 			else if (runner === "tio") {
 				picker.style.display = "block";
+				inpdiv.style.display = "block";
+				inp.style.height = head.style.height;
 			}
 		});
 	});
@@ -165,10 +173,11 @@ window.addEventListener('DOMContentLoaded', (event) => {
 		if (mode === "dfn") {
 			let trans = code.value;
 			if (trans.indexOf("\n") + 1) {
-				trans = "⋄⎕FX '" + ("run←" + trans.trim()).split("\n").join("' '") + "' ''⋄";
+				trans = "⋄⎕FX '" + (funcName + "←" + trans.trim()).split("\n").join("' '") + "' ''⋄";
 			}
 			else { // Make it easier for debugging
-				trans = "⋄run←" + trans.trim() + "⋄";
+				sep = (runner === "tryAPL") ? '⋄' : '\n';
+				trans = sep + funcName + "←" + trans.trim() + sep;
 			}
 			promise = await executeAPL(head.value, trans, foot.value, runner, tioLang, input);
 		}
@@ -180,7 +189,6 @@ window.addEventListener('DOMContentLoaded', (event) => {
 				promise = await executeAPL(head.value, "\n∇f\n" + code.value.trim() + "\n∇", foot.value, runner, tioLang, input);
 			}
 		}
-		console.log(promise);
-		// out.innerHTML = promise.join("\n");
+		out.innerHTML = promise.join("\n");
 	});
 });

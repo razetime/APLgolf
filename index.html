@@ -27,8 +27,8 @@
 			<div class="container">
 				<h5>Runner</h5>
 				<div>
-					<label for="tryapl"><input type="radio" name="runner" id="tryapl" class="runner"
-							value="tryAPL"><span class="label-body">tryAPL</span></label>
+					<label for="tryapl"><input type="radio" name="runner" id="tryapl" class="runner" value="tryAPL"
+							checked="checked"><span class="label-body">tryAPL</span></label>
 					<label for="tio"><input type="radio" name="runner" id="tio" class="runner" value="tio"><span
 							class="label-body">Try It Online!</span></label>
 
@@ -48,10 +48,14 @@
 			<div class="container">
 				<h5>Submission Type</h5>
 				<div>
-					<label for="dfn"><input type="radio" name="sub" id="dfn" class="sub" value="dfn"><span
-							class="label-body">Function</span></label>
+					<label for="dfn"><input type="radio" name="sub" id="dfn" class="sub" value="dfn"
+							checked="checked"><span class="label-body">Function</span></label>
 					<label for="tradfn"><input type="radio" name="sub" id="tradfn" class="sub" value="tradfn"><span
 							class="label-body">Full Program</span></label>
+				</div>
+				<h5>Function/Program Name</h5>
+				<div>
+					<input type="text" id="">
 				</div>
 			</div>
 		</div>
@@ -93,8 +97,8 @@
 		<h5>Footer <span class="arrow" data-hide="foot">∇</span></h5>
 		<textarea name="" id="foot" rows="1" class="u-full-width"></textarea>
 	</div>
-	<div class="twelve columns">
-		<h5>Input <span class="arrow" data-hide="input">∇</span></h5>
+	<div class="twelve columns" id="inp-div" style="display: none;">
+		<h5>Input (TIO only)<span class="arrow" data-hide="input">∇</span></h5>
 		<textarea name="" id="input" rows="1" class="u-full-width"></textarea>
 	</div>
 	<div class="twelve columns">
