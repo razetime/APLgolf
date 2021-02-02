@@ -196,12 +196,12 @@ window.addEventListener('DOMContentLoaded', (event) => {
 	});
 
 	//byte counting
-	code.addEventListener("keydown", (event) => {
+	code.oninput = (event) => {
 		document.getElementById("count").innerHTML = code.value.length;
-	});
+	};
 
 	// Function name
-	document.getElementById("fname").onchange = (event) => {
+	document.getElementById("fname").oninput = (event) => {
 		funcName = document.getElementById("fname").value;
 		console.log(funcName);
 	};
@@ -234,7 +234,7 @@ window.addEventListener('DOMContentLoaded', (event) => {
 \`\`\`
 ${code.value}
 \`\`\`
-[Try it on golfAPL!](${window.location.href})
+[Try it on APLgolf!](${window.location.href})
 
 A ${mode} submission which ____.
 
@@ -249,7 +249,7 @@ A ${mode} submission which ____.
 		let link = encodeURI(location.protocol + '//' + location.host + location.pathname + "?h=" + e(head.value) + "&c=" + e(code.value) + "&f=" + e(foot.value) + "&i=" + e(inp.value) + "&r=" + e(runner) + "&l=" + e(tioLang) + "&m=" + e(mode) + "&n=" + e(funcName));
 		console.log(link);
 		history.pushState({}, null, link);
-		out.innerText = `[APL, ${document.getElementById("count").innerHTML} bytes](${window.location.href})`;
+		out.innerText = `APL, [${document.getElementById("count").innerHTML} bytes](${window.location.href}): \`${code.value}\``;
 	})
 
 	// run APL code on click
@@ -277,6 +277,7 @@ A ${mode} submission which ____.
 				promise = await executeAPL(head.value, "\n∇" + funcName + "\n" + code.value.trim() + "\n∇", foot.value, runner, tioLang, input);
 			}
 		}
+		document.getElementById("run").innerHTML = "Run";
 		out.innerHTML = promise.join("\n");
 	});
 });
