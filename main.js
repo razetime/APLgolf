@@ -336,7 +336,7 @@ A ${mode} submission which ____.
 			}
 		}
 		if (runner === "tio") {
-			promise = promise.slice(0, -2);
+			promise = [promise[0], promise[1].split("\n").slice(0, -5).join("\n")];
 		}
 
 		out.innerHTML = promise.join("\n");
