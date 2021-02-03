@@ -335,6 +335,9 @@ A ${mode} submission which ____.
 				promise = await executeAPL(head.value, '\n' + funcName + '←' + code.value + '\n', foot.value, runner, tioLang, input);
 			}
 		}
+		if (runner === "tio") {
+			promise = promise.slice(0, -2);
+		}
 
 		out.innerHTML = promise.join("\n");
 		runBtn.innerHTML = "Run";
