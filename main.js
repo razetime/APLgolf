@@ -320,6 +320,7 @@ A ${mode} submission which ____.
 			promise = await executeAPL(head.value, trans, foot.value, runner, tioLang, input);
 		}
 		else if (mode === "tradfn") {
+
 			if (runner === "tryAPL") {
 				promise = await executeAPL(head.value, code.value.trim().replace("\n", "⋄"), foot.value, runner, tioLang, input);
 			}
@@ -336,6 +337,7 @@ A ${mode} submission which ____.
 			}
 		}
 		if (runner === "tio") {
+			console.log(promise, mode);
 			promise = [promise[0], promise[1].split("\n").slice(0, -5).join("\n")];
 		}
 

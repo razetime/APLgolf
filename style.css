@@ -17,7 +17,7 @@ h5 {
 }
 
 #output {
-overflow-x: scroll;
+overflow-x: auto;
 font-size: 16px;
  }
 .attrs {
