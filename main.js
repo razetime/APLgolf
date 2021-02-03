@@ -165,18 +165,7 @@ window.addEventListener('DOMContentLoaded', (event) => {
 			}
 		});
 	});
-	// to remedy autofill
-	if (document.getElementById("tryapl").checked) {
-		picker.style.display = "none";
-		inpdiv.style.display = "none";
-		runner = "tryAPL";
-	}
-	else {
-		picker.style.display = "block";
-		inpdiv.style.display = "block";
-		inp.style.height = head.style.height;
-		runner = "tio";
-	}
+
 
 	// Change language
 	document.querySelectorAll(".pick").forEach((item) => {
