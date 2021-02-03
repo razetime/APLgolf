@@ -96,7 +96,7 @@ window.addEventListener('DOMContentLoaded', (event) => {
 	code.value = cd(urlParams.get("c") || "");
 	foot.value = cd(urlParams.get("f") || "");
 	inp.value = cd(urlParams.get("i") || "");
-	runner = d(urlParams.get("r") || "");
+	runner = d(urlParams.get("r") || "tryAPL");
 	tioLang = d(urlParams.get("l") || "");
 	mode = d(urlParams.get("m") || "dfn");
 	document.getElementById("mode").innerHTML = mode;
@@ -107,18 +107,54 @@ window.addEventListener('DOMContentLoaded', (event) => {
 		console.log(runner);
 		inpdiv.style.display = "block";
 	}
+	let cCode = CodeMirror.fromTextArea(code, {
+		theme: "material",
+		viewportMargin: Infinity,
+		value: code.value
+	});
+	let cHead = CodeMirror.fromTextArea(head, {
+		theme: "material",
+		viewportMargin: Infinity,
+		value: head.value
+	});
+	let cFoot = CodeMirror.fromTextArea(foot, {
+		theme: "material",
+		viewportMargin: Infinity,
+		value: head.value
+	});
+	let cInput = CodeMirror.fromTextArea(inp, {
+		theme: "material",
+		viewportMargin: Infinity,
+		value: inp.value
+	});
 
+	cCode.on("change", e => {
+		cCode.save();
+		document.getElementById("count").innerHTML = code.value.length;
+	});
+
+	cHead.on("change", e => {
+		cHead.save();
+	});
+
+	cFoot.on("change", e => {
+		cFoot.save();
+	});
+
+	cInput.on("change", e => {
+		cInput.save();
+	});
 
 	// Textarea auto-sizing
-	const tx = document.getElementsByTagName('textarea');
-	for (let i = 0; i < tx.length; i++) {
-		tx[i].setAttribute('style', 'height:' + (tx[i].scrollHeight) + 'px;overflow-y:hidden;');
-		tx[i].addEventListener("input", OnInput, false);
-	}
-	function OnInput() {
-		this.style.height = 'auto';
-		this.style.height = this.scrollHeight + 'px';
-	}
+	// const tx = document.getElementsByTagName('textarea');
+	// for (let i = 0; i < tx.length; i++) {
+	// 	tx[i].setAttribute('style', 'height:' + (tx[i].scrollHeight) + 'px;overflow-y:hidden;');
+	// 	tx[i].addEventListener("input", OnInput, false);
+	// }
+	// function OnInput() {
+	// 	this.style.height = 'auto';
+	// 	this.style.height = this.scrollHeight + 'px';
+	// }
 
 	// Options menu show/hide
 	document.getElementById("options").addEventListener('click', (event) => {
@@ -134,18 +170,21 @@ window.addEventListener('DOMContentLoaded', (event) => {
 	document.querySelectorAll(".arrow").forEach((item) => {
 		item.addEventListener('click', (event) => {
 			// Arrows: ∇ ᐅ
-			let elem = document.getElementById(item.getAttribute("data-hide"));
-			if (elem.style.display !== "none") {
-				elem.style.display = "none";
-				item.innerHTML = 'ᐅ';
-				item.style.fontSize = "1.5rem";
+			let elems = document.getElementById(item.getAttribute("data-hide")).parentNode;
+			elems.querySelectorAll('.CodeMirror').forEach(elem => {
+				if (elem.style.display !== "none") {
+					elem.style.display = "none";
+					item.innerHTML = 'ᐅ';
+					item.style.fontSize = "1.5rem";
 
-			}
-			else {
-				elem.style.display = "block";
-				item.innerHTML = '∇';
-				item.style.fontSize = "2.5rem";
-			}
+				}
+				else {
+					elem.style.display = "block";
+					item.innerHTML = '∇';
+					item.style.fontSize = "2.5rem";
+				}
+			});
+
 		});
 	});
 
@@ -202,9 +241,9 @@ window.addEventListener('DOMContentLoaded', (event) => {
 	});
 
 	//byte counting
-	code.oninput = (event) => {
-		document.getElementById("count").innerHTML = code.value.length;
-	};
+	// code.oninput = (event) => {
+	// 	document.getElementById("count").innerHTML = code.value.length;
+	// };
 
 	// Function name
 	document.getElementById("fname").oninput = (event) => {

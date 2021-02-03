@@ -18,6 +18,7 @@ h5 {
 
 #output, #out {
 overflow-x: scroll;
+font-size: 16px;
  }
 .attrs {
 	font-size: 1.5rem;
@@ -37,3 +38,10 @@ overflow-x: scroll;
 	float:right;
 }
 
+.CodeMirror {
+	font-family: 'APL386', monospace;
+	font-size: 16px;
+	height: auto;
+	margin-bottom: 3rem;
+	min-height: 3.5rem;
+}
