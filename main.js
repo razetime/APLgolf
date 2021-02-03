@@ -104,7 +104,8 @@ window.addEventListener('DOMContentLoaded', (event) => {
 	document.getElementById("fname").value = funcName;
 	document.getElementById("count").innerHTML = code.value.length;
 	if (runner === "tio") {
-		inp.style.display = "block";
+		console.log(runner);
+		inpdiv.style.display = "block";
 	}
 
 
