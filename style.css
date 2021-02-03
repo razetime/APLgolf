@@ -16,7 +16,7 @@ h5 {
 	cursor: pointer;
 }
 
-#output, #out {
+#output {
 overflow-x: scroll;
 font-size: 16px;
  }
