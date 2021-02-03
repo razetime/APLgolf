@@ -17,7 +17,7 @@ h5 {
 }
 
 #output, #out {
-overflow-x: hidden;
+overflow-x: scroll;
  }
 .attrs {
 	font-size: 1.5rem;
