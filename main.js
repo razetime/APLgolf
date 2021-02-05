@@ -128,9 +128,24 @@ window.addEventListener('DOMContentLoaded', (event) => {
 		value: inp.value
 	});
 
+	let chs = "^⌹⍳⍴!%*+,-<=>?|~⊢⊣⌷≤≥≠∨∧÷×∊↑↓○⌈⌊⊂⊃∩∪⊥⊤⍱⍲⍒⍋⍉⌽⊖⍟⍕⍎⍪≡≢⍷⍸⊆⊇⍧⍮√ϼ…¨⍨⌸⍁⍩ᑈᐵ⌶/\\&.@∘⌺⍫⍣⍢⍤⍛⍡⍥⍠⎕⍞∆⍙ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz_0123456789¯∞⍬#⍺⍵⍶⍹∇{}:";
 	cCode.on("change", e => {
 		cCode.save();
-		document.getElementById("count").innerHTML = code.value.length;
+		let length = 0;
+		let r =code.value;
+		console.log(r);
+		for(let i=0;i<r.length;i++){
+			let x = r[i];
+			if (chs.indexOf(x) + 1) {
+				length += 1;
+			}
+			else {
+				let a = new TextEncoder("utf-8").encode(x);
+				length += a.length;
+			}
+		}
+		
+		document.getElementById("count").innerHTML = length;
 	});
 
 	cHead.on("change", e => {
