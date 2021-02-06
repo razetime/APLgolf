@@ -68,7 +68,15 @@
 		<div class="four columns">
 			<div class="container">
 				<h5>Explanation</h5>
-				<p>To be added.</p>
+				<label for="explanation"><input type="checkbox" id="explain-or-no">
+					<span class="label-body">Add Explanation?</span></label>
+
+				<div id="explain" style="display: none;">
+					<label for="single"><input type="radio" name="sub" id="single" class="no-auto" value="single"
+							><span class="label-body">Single Block</span></label>
+					<label for="multiple"><input type="radio" name="sub" id="multiple" class="no-auto"
+							value="multiple"><span class="label-body">Multiple Block</span></label>
+				</div>
 			</div>
 		</div>
 	</div>

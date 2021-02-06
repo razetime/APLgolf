@@ -1,4 +1,4 @@
-// Following three functions are courtesy of dzaima
+// Following five functions are courtesy of dzaima
 function deflate(arr) {
 	return pako.deflateRaw(arr, { "level": 9 });
 }
@@ -32,6 +32,7 @@ async function tryAPL(state) {
 	return response.json();
 }
 
+// more help from dzaima here
 async function TIO(code, input, lang) {
 	const encoder = new TextEncoder("utf-8");
 	let length = encoder.encode(code).length;
@@ -51,8 +52,6 @@ async function TIO(code, input, lang) {
 	return text.slice(16).split(text.slice(0, 16));
 }
 
-
-
 async function executeAPL(head, code, foot, runner, lang, input) {
 	let expr = "";
 	if (runner === "tryAPL") {
@@ -71,6 +70,8 @@ async function executeAPL(head, code, foot, runner, lang, input) {
 	}
 }
 
+
+// main program
 window.addEventListener('DOMContentLoaded', (event) => {
 	// Globals:
 	const queryString = window.location.search;
@@ -81,6 +82,7 @@ window.addEventListener('DOMContentLoaded', (event) => {
 	let mode = "dfn"; //default mode
 	let tioLang = "apl-dyalog";
 	let funcName = "f";
+	let eType = "single";
 
 	// code input and output
 	let code = document.getElementById("code");
@@ -89,7 +91,9 @@ window.addEventListener('DOMContentLoaded', (event) => {
 	let inp = document.getElementById("input");
 	let out = document.getElementById("output");
 	let inpdiv = document.getElementById("inp-div");
+	let explain = document.getElementById("explain");
 
+	// prefill items 
 	let d = x => decodeURIComponent(x);
 	let cd = x => new TextDecoder("utf-8").decode(inflate(b64ToArr(d(x))));
 	head.value = cd(urlParams.get("h") || "");
@@ -97,7 +101,7 @@ window.addEventListener('DOMContentLoaded', (event) => {
 	foot.value = cd(urlParams.get("f") || "");
 	inp.value = cd(urlParams.get("i") || "");
 	runner = d(urlParams.get("r") || "tryAPL");
-	tioLang = d(urlParams.get("l") || "");
+	tioLang = d(urlParams.get("l") || "apl-dyalog");
 	mode = d(urlParams.get("m") || "dfn");
 	document.getElementById("mode").innerHTML = mode;
 	funcName = d(urlParams.get("n") || "f");
@@ -132,9 +136,8 @@ window.addEventListener('DOMContentLoaded', (event) => {
 	cCode.on("change", e => {
 		cCode.save();
 		let length = 0;
-		let r =code.value;
-		console.log(r);
-		for(let i=0;i<r.length;i++){
+		let r = code.value;
+		for (let i = 0; i < r.length; i++) {
 			let x = r[i];
 			if (chs.indexOf(x) + 1) {
 				length += 1;
@@ -144,7 +147,7 @@ window.addEventListener('DOMContentLoaded', (event) => {
 				length += a.length;
 			}
 		}
-		
+
 		document.getElementById("count").innerHTML = length;
 	});
 
@@ -218,6 +221,17 @@ window.addEventListener('DOMContentLoaded', (event) => {
 				inp.style.height = head.style.height;
 			}
 		});
+	});
+
+	//
+	document.getElementById("explain-or-no").addEventListener('click', (event) => {
+
+		if (explain.style.display === "none") {
+			explain.style.display = "block";
+		}
+		else {
+			explain.style.display = "none";
+		}
 	});
 
 
@@ -302,6 +316,41 @@ A ${mode} submission which ____.
 [1]: ${postLink}
 [2]: https://github.com/abrudz/SBCS
 `;
+		if (document.getElementById("explain-or-no").checked) {
+			let indices = [];
+			let codeText = code.value;
+			codeText = codeText.slice(1, codeText.length - 1);
+			if (mode === "dfn") {
+				codeText = ' ' + codeText + ' ';
+			}
+
+			var re = /('.+'|[A-Za-z0-9\[\] ]+←*|\n)|[^\1]/g;
+			while ((match = re.exec(codeText)) != null) {
+				indices.push(match.index);
+			}
+			indices.push(codeText.length);
+			let expln = [];
+			let block = document.getElementById("single").checked;
+			for (let i = indices.length - 1; i >= 0; i--) {
+				let curr = codeText.slice(indices[i - 1], indices[i]);
+				if (block) {
+					curr = ' '.repeat(indices[i - 1]) + curr;
+					curr = curr.padEnd(codeText.length);
+				}
+				if (curr.split('').every(x => x === ' ')) {
+					continue;
+				}
+				expln.push(curr);
+			}
+			if (block) {
+				expln = "```\n" + expln.join('\n') + "\n```";
+			}
+			else {
+				expln = expln.map(x => '`' + x + '` ');
+				expln = expln.join("\n\n");
+			}
+			post = post + "\n## Explanation\n\n" + expln;
+		}
 		out.innerText = post;
 	});
 
