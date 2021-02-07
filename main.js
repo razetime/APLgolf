@@ -311,10 +311,10 @@ ${code.value}
 \`\`\`
 [Try it on APLgolf!](${window.location.href})
 
-A ${mode} submission which ____.
-
 [1]: ${postLink}
 [2]: https://github.com/abrudz/SBCS
+
+A ${mode} submission which ____.
 `;
 		if (document.getElementById("explain-or-no").checked) {
 			let indices = [];
