@@ -135,18 +135,18 @@ window.addEventListener('DOMContentLoaded', (event) => {
 	let chs = "^⌹⍳⍴!%*+,-<=>?|~⊢⊣⌷≤≥≠∨∧÷×∊↑↓○⌈⌊⊂⊃∩∪⊥⊤⍱⍲⍒⍋⍉⌽⊖⍟⍕⍎⍪≡≢⍷⍸⊆⊇⍧⍮√ϼ…¨⍨⌸⍁⍩ᑈᐵ⌶/\\&.@∘⌺⍫⍣⍢⍤⍛⍡⍥⍠⎕⍞∆⍙ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz_0123456789¯∞⍬#⍺⍵⍶⍹∇{}:";
 	cCode.on("change", e => {
 		cCode.save();
-		let length = 0;
-		let r = code.value;
-		for (let i = 0; i < r.length; i++) {
-			let x = r[i];
-			if (chs.indexOf(x) + 1) {
-				length += 1;
-			}
-			else {
-				let a = new TextEncoder("utf-8").encode(x);
-				length += a.length;
-			}
-		}
+		let length = code.value.length;
+		// let r = code.value;
+		// for (let i = 0; i < r.length; i++) {
+		// 	let x = r[i];
+		// 	if (chs.indexOf(x) + 1) {
+		// 		length += 1;
+		// 	}
+		// 	else {
+		// 		let a = new TextEncoder("utf-8").encode(x);
+		// 		length += a.length;
+		// 	}
+		// }
 
 		document.getElementById("count").innerHTML = length;
 	});
