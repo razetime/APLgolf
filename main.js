@@ -402,7 +402,7 @@ A ${mode} submission which ____.
 		}
 		if (runner === "tio") {
 			console.log(promise, mode);
-			promise = [promise[0], promise[1].split("\n").slice(0, -5).join("\n")];
+			promise = [promise[0], (promise[1] || "").split("\n").slice(0, -5).join("\n")];
 		}
 
 		out.innerHTML = promise.join("\n");
