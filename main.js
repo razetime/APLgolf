@@ -62,7 +62,8 @@ async function executeAPL(head, code, foot, runner, lang, input) {
         // spam ⋄ everywhere and hope it works
         head = head.replaceAll("\n", "⋄");
         foot = foot.replaceAll("\n", "⋄");
-        expr = [head, code, foot].join("⋄");
+        expr = [head, code, foot].join('⋄').replace(/⍝.*?⋄/g,'⋄');
+        console.log(expr);
         let state = ["", 0, "", expr];
         console.log(state);
         result = await tryAPL(state);
