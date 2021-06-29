@@ -62,7 +62,7 @@ async function executeAPL(head, code, foot, runner, lang, input) {
         // spam ⋄ everywhere and hope it works
         head = head.replaceAll("\n", "⋄");
         foot = foot.replaceAll("\n", "⋄");
-        expr = [head, code, foot].join('⋄').replace(/⍝.*?⋄/g,'⋄');
+        expr = [head, code, foot].join('⋄').replace(/⍝[^']*?⋄/g,'⋄');
         console.log(expr);
         let state = ["", 0, "", expr];
         console.log(state);
@@ -213,7 +213,7 @@ window.addEventListener('DOMContentLoaded', (event) => {
     // Change runner site
     document.querySelectorAll(".runner").forEach((item) => {
         item.addEventListener('click', (event) => {
-            runner = item.value;
+            runner = item.id;
             console.log(runner);
             if (runner === "tryapl") {
                 picker.style.display = "none";
