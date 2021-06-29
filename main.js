@@ -58,7 +58,7 @@ async function TIO(code, input, lang) {
 
 async function executeAPL(head, code, foot, runner, lang, input) {
     let expr = "";
-    if (runner === "tryAPL") {
+    if (runner === "tryapl") {
         // spam ⋄ everywhere and hope it works
         head = head.replaceAll("\n", "⋄");
         foot = foot.replaceAll("\n", "⋄");
@@ -82,7 +82,7 @@ window.addEventListener('DOMContentLoaded', (event) => {
     console.log(queryString);
     const urlParams = new URLSearchParams(queryString);
     let sidebar = document.getElementById("sidebar"); //Options menu
-    let runner = "tryAPL"; // default runner
+    let runner = "tryapl"; // default runner
     let mode = "dfn"; //default mode
     let tioLang = "apl-dyalog";
     let funcName = "f";
@@ -104,7 +104,7 @@ window.addEventListener('DOMContentLoaded', (event) => {
     code.value = cd(urlParams.get("c") || "");
     foot.value = cd(urlParams.get("f") || "");
     inp.value = cd(urlParams.get("i") || "");
-    runner = d(urlParams.get("r") || "tryAPL");
+    runner = d(urlParams.get("r") || "tryapl");
     tioLang = d(urlParams.get("l") || "apl-dyalog");
     mode = d(urlParams.get("m") || "dfn");
     document.getElementById("mode").innerHTML = mode;
@@ -215,7 +215,7 @@ window.addEventListener('DOMContentLoaded', (event) => {
         item.addEventListener('click', (event) => {
             runner = item.value;
             console.log(runner);
-            if (runner === "tryAPL") {
+            if (runner === "tryapl") {
                 picker.style.display = "none";
                 inpdiv.style.display = "none";
             } else if (runner === "tio") {
@@ -376,19 +376,19 @@ A ${mode} submission which ____.
             if (trans.indexOf("\n") + 1) {
                 trans = "⋄⎕FX '" + (funcName + "←" + trans.trim()).split("\n").join("' '") + "' ''⋄";
             } else { // Make it easier for debugging
-                sep = (runner === "tryAPL") ? '⋄' : '\n';
+                sep = (runner === "tryapl") ? '⋄' : '\n';
                 trans = sep + funcName + "←" + trans.trim() + sep;
             }
             promise = await executeAPL(head.value, trans, foot.value, runner, tioLang, input);
         } else if (mode === "tradfn") {
 
-            if (runner === "tryAPL") {
+            if (runner === "tryapl") {
                 promise = await executeAPL(head.value, code.value.trim().replace("\n", "⋄"), foot.value, runner, tioLang, input);
             } else {
                 promise = await executeAPL(head.value, "\n∇" + funcName + "\n" + code.value.trim() + "\n∇", foot.value, runner, tioLang, input);
             }
         } else if (mode === "train") {
-            if (runner === "tryAPL") {
+            if (runner === "tryapl") {
                 promise = await executeAPL(head.value, '⋄' + funcName + '←' + code.value + '⋄', foot.value, runner, tioLang, input);
             } else {
                 promise = await executeAPL(head.value, '\n' + funcName + '←' + code.value + '\n', foot.value, runner, tioLang, input);
