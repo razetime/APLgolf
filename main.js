@@ -111,8 +111,10 @@ window.addEventListener('DOMContentLoaded', (event) => {
     funcName = d(urlParams.get("n") || "f");
     document.getElementById("fname").value = funcName;
     document.getElementById("count").innerHTML = code.value.length;
+    document.getElementById(runner).checked = true;
     if (runner === "tio") {
         console.log(runner);
+
         inpdiv.style.display = "block";
     }
     let cCode = CodeMirror.fromTextArea(code, {
