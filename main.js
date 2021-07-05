@@ -105,6 +105,7 @@ window.addEventListener('DOMContentLoaded', (event) => {
     foot.value = cd(urlParams.get("f") || "");
     inp.value = cd(urlParams.get("i") || "");
     runner = d(urlParams.get("r") || "tryapl");
+    if (runner === "tryAPL") { runner = "tryapl"; }
     tioLang = d(urlParams.get("l") || "apl-dyalog");
     mode = d(urlParams.get("m") || "dfn");
     document.getElementById("mode").innerHTML = mode;
