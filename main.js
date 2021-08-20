@@ -24,6 +24,10 @@ function b64ToArr(str) {
     return new Uint8Array([...atob(decodeURIComponent(str).replace(/@/g, "+"))].map(c => c.charCodeAt()))
 }
 
+function cToClip(str) {
+    navigator.clipboard.writeText(str);
+}
+
 // From the TryAPL docs
 async function tryAPL(state) {
     response = await fetch("https://tryapl.org/Exec", {
@@ -351,6 +355,9 @@ A ${mode} submission which ____.
             post = post + "\n## Explanation\n\n" + expln;
         }
         out.innerText = post;
+        document.getElementById("cmcify").innerText = "Copied!";
+        setTimeout(()=>document.getElementById("cmcify").innerText = "CMCify", 1000);
+        cToClip(post);
     });
 
     document.getElementById("cmcify").addEventListener('click', (event) => {
@@ -360,6 +367,9 @@ A ${mode} submission which ____.
         console.log(link);
         history.pushState({}, null, link);
         out.innerText = `APL, [${document.getElementById("count").innerHTML} bytes](${window.location.href}): \`${code.value}\``;
+        document.getElementById("postify").innerText = "Copied!";
+        setTimeout(()=>document.getElementById("postify").innerText = "CMCify", 1000);
+        cToClip(out.innerText);
     })
 
     let runBtn = document.getElementById("run");
