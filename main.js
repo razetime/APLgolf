@@ -355,8 +355,8 @@ A ${mode} submission which ____.
             post = post + "\n## Explanation\n\n" + expln;
         }
         out.innerText = post;
-        document.getElementById("cmcify").innerText = "Copied!";
-        setTimeout(()=>document.getElementById("cmcify").innerText = "CMCify", 1000);
+        document.getElementById("postify").innerText = "Copied!";
+        setTimeout(()=>document.getElementById("postify").innerText = "Postify", 1000);
         cToClip(post);
     });
 
@@ -367,8 +367,8 @@ A ${mode} submission which ____.
         console.log(link);
         history.pushState({}, null, link);
         out.innerText = `APL, [${document.getElementById("count").innerHTML} bytes](${window.location.href}): \`${code.value}\``;
-        document.getElementById("postify").innerText = "Copied!";
-        setTimeout(()=>document.getElementById("postify").innerText = "CMCify", 1000);
+        document.getElementById("cmcify").innerText = "Copied!";
+        setTimeout(()=>document.getElementById("cmcify").innerText = "CMCify", 1000);
         cToClip(out.innerText);
     })
 
