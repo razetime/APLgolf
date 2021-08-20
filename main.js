@@ -101,6 +101,15 @@ window.addEventListener('DOMContentLoaded', (event) => {
     let inpdiv = document.getElementById("inp-div");
     let explain = document.getElementById("explain");
 
+    function errorCheckRunner(runner) {
+        if (runner === "tryAPL") { runner = "tryapl"; }
+        if (runner !== "tryapl" && runner !== "tio") {
+            console.error("The link has runner set to '" + runner + "'. Must be one of 'tryapl' or 'tio'. It defaulted to 'tryapl'.")
+            runner = "tryapl";
+        }
+        return runner;
+    }
+
     // prefill items
     let d = x => decodeURIComponent(x);
     let cd = x => new TextDecoder("utf-8").decode(inflate(b64ToArr(d(x))));
@@ -109,6 +118,7 @@ window.addEventListener('DOMContentLoaded', (event) => {
     foot.value = cd(urlParams.get("f") || "");
     inp.value = cd(urlParams.get("i") || "");
     runner = d(urlParams.get("r") || "tryapl");
+    runner = errorCheckRunner(runner);
     tioLang = d(urlParams.get("l") || "apl-dyalog");
     mode = d(urlParams.get("m") || "dfn");
     document.getElementById("mode").innerHTML = mode;
