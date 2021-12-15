@@ -46,3 +46,12 @@ line-height: 16px;
 	margin-bottom: 3rem;
 	min-height: 3.5rem;
 }
+
+.ngn_lb {
+	background-color: #0d1117 !important;
+	color: #d3d7cf !important;
+}
+
+.ngn_x {
+	display: none;
+}
