@@ -328,7 +328,7 @@ ${code.value}
 [1]: ${postLink}
 [2]: https://github.com/abrudz/SBCS
 
-A ${mode} which ____.
+A ${document.getElementById("mode").innerHTML} which ____.
 `;
         if (document.getElementById("explain-or-no").checked) {
             let indices = [];
