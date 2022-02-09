@@ -268,11 +268,11 @@ window.addEventListener('DOMContentLoaded', (event) => {
             mode = item.value;
             console.log(mode);
             if (mode === "dfn") {
-                document.getElementById("mode").innerHTML = "Function";
+                document.getElementById("mode").innerHTML = "dfn";
             } else if (mode === "tradfn") {
-                document.getElementById("mode").innerHTML = "Full Program";
+                document.getElementById("mode").innerHTML = "full program";
             } else {
-                document.getElementById("mode").innerHTML = "Function Train";
+                document.getElementById("mode").innerHTML = "tacit function";
             }
 
         });
@@ -328,7 +328,7 @@ ${code.value}
 [1]: ${postLink}
 [2]: https://github.com/abrudz/SBCS
 
-A ${mode} submission which ____.
+A ${mode} which ____.
 `;
         if (document.getElementById("explain-or-no").checked) {
             let indices = [];
