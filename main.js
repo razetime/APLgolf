@@ -121,7 +121,16 @@ window.addEventListener('DOMContentLoaded', (event) => {
     runner = errorCheckRunner(runner);
     tioLang = d(urlParams.get("l") || "apl-dyalog");
     mode = d(urlParams.get("m") || "dfn");
-    document.getElementById("mode").innerHTML = mode;
+    if(mode == "train"){
+      document.getElementById("mode").innerHTML = "tacit function";
+    } else if (mode == "dfn") {
+        document.getElementById("mode").innerHTML = "dfn";
+    } else if (mode == "tradfn") {
+        document.getElementById("mode").innerHTML = "full program";
+    } else {
+        document.getElementById("output").style.color = "red";
+        document.getElementById("output").innerHTML = "URL does not contain a valid mode.";
+    }
     funcName = d(urlParams.get("n") || "f");
     document.getElementById("fname").value = funcName;
     document.getElementById("count").innerHTML = code.value.length;
