@@ -403,7 +403,7 @@ A ${document.getElementById("mode").innerHTML} which ____.
         if (mode === "dfn") {
             let trans = code.value;
             if (trans.indexOf("\n") + 1) {
-                trans = "⋄⎕FX '" + (funcName + "←" + trans.trim()).split("\n").join("' '") + "' ''⋄";
+                trans = "⋄⎕FX '" + (funcName + "←" + trans.trim().replaceAll("'","''")).split("\n").join("' '") + "' ''⋄";
             } else { // Make it easier for debugging
                 sep = (runner === "tryapl") ? '⋄' : '\n';
                 trans = sep + funcName + "←" + trans.trim() + sep;
