@@ -136,8 +136,6 @@ window.addEventListener('DOMContentLoaded', (event) => {
     document.getElementById("count").innerHTML = code.value.length;
     document.getElementById(runner).checked = true;
     if (runner === "tio") {
-        console.log(runner);
-
         inpdiv.style.display = "block";
     }
     let cCode = CodeMirror.fromTextArea(code, {
@@ -165,18 +163,6 @@ window.addEventListener('DOMContentLoaded', (event) => {
     cCode.on("change", e => {
         cCode.save();
         let length = code.value.length;
-        // let r = code.value;
-        // for (let i = 0; i < r.length; i++) {
-        // 	let x = r[i];
-        // 	if (chs.indexOf(x) + 1) {
-        // 		length += 1;
-        // 	}
-        // 	else {
-        // 		let a = new TextEncoder("utf-8").encode(x);
-        // 		length += a.length;
-        // 	}
-        // }
-
         document.getElementById("count").innerHTML = length;
     });
 
@@ -191,17 +177,6 @@ window.addEventListener('DOMContentLoaded', (event) => {
     cInput.on("change", e => {
         cInput.save();
     });
-
-    // Textarea auto-sizing
-    // const tx = document.getElementsByTagName('textarea');
-    // for (let i = 0; i < tx.length; i++) {
-    // 	tx[i].setAttribute('style', 'height:' + (tx[i].scrollHeight) + 'px;overflow-y:hidden;');
-    // 	tx[i].addEventListener("input", OnInput, false);
-    // }
-    // function OnInput() {
-    // 	this.style.height = 'auto';
-    // 	this.style.height = this.scrollHeight + 'px';
-    // }
 
     // Options menu show/hide
     document.getElementById("options").addEventListener('click', (event) => {
@@ -304,8 +279,11 @@ window.addEventListener('DOMContentLoaded', (event) => {
     };
 
     document.getElementById("postify").addEventListener('click', (event) => {
-        let e = (x) => decodeURIComponent(x);
+        // let e = (x) => decodeURIComponent(x);
+        let e = (x) => x; // should have been encodeURI. bse64 is enough to put in the url
         let ce = (x) => arrToB64(deflate(e(x)));
+        let hv=ce(head.value),cv=ce(code.value),fv=ce(foot.value);
+        console.log(hv,cv,fv);
         let link = encodeURI(location.protocol + '//' + location.host + location.pathname + "?h=" + ce(head.value) + "&c=" + ce(code.value) + "&f=" + ce(foot.value) + "&i=" + ce(inp.value) + "&r=" + e(runner) + "&l=" + e(tioLang) + "&m=" + e(mode) + "&n=" + e(funcName));
         console.log(link);
         history.pushState({}, null, link);
