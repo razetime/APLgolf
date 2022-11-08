@@ -358,10 +358,9 @@ A ${document.getElementById("mode").innerHTML} which ____.
     });
 
     document.getElementById("cmcify").addEventListener('click', (event) => {
-        let e = (x) => d(x);
+        let e = (x) => x;
         let ce = (x) => arrToB64(deflate(e(x)));
         let link = encodeURI(location.protocol + '//' + location.host + location.pathname + "?h=" + ce(head.value) + "&c=" + ce(code.value) + "&f=" + ce(foot.value) + "&i=" + ce(inp.value) + "&r=" + e(runner) + "&l=" + e(tioLang) + "&m=" + e(mode) + "&n=" + e(funcName));
-        console.log(link);
         history.pushState({}, null, link);
         out.innerText = `APL, [${document.getElementById("count").innerHTML} bytes](${window.location.href}): \`${code.value}\``;
         document.getElementById("cmcify").innerText = "Copied!";
