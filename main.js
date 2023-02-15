@@ -40,12 +40,16 @@ async function tryAPL(state) {
     return response.json();
 }
 
-// more help from dzaima here
+const e = (x) => x; // should have been encodeURI. bse64 is enough to put in the url
+const ce = (x) => arrToB64(deflate(e(x)));
+
+// made by dzaima
 async function TIO(code, input, lang) {
     const encoder = new TextEncoder("utf-8");
     let length = encoder.encode(code).length;
     let iLength = encoder.encode(input).length;
-    //  Vlang\u00001\u0000{language}\u0000F.code.tio\u0000{# of bytes in code}\u0000{code}F.input.tio\u0000{length of input}\u0000{input}Vargs\u0000{number of ARGV}{ARGV}\u0000R
+    // Format:
+    // Vlang\u00001\u0000{language}\u0000F.code.tio\u0000{# of bytes in code}\u0000{code}F.input.tio\u0000{length of input}\u0000{input}Vargs\u0000{number of ARGV}{ARGV}\u0000R
     let rBody = "Vlang\x001\x00" + lang + "\x00F.code.tio\x00" + length + "\x00" + code + "F.input.tio\x00" + iLength + "\x00" + input + "Vargs\x000\x00R";
     rBody = encode(rBody);
     let fetched = await fetch("https://tio.run/cgi-bin/run/api/", {
@@ -63,7 +67,8 @@ async function TIO(code, input, lang) {
 async function executeAPL(head, code, foot, runner, lang, input) {
     let expr = "";
     if (runner === "tryapl") {
-        // spam ⋄ everywhere and hope it works
+        // insert ⋄ between all lines (with some special casing) and hope it works.
+        // Only way to make things run in tryAPL's sandboxed repl environment.
         head = head.replaceAll("\n", "⋄");
         foot = foot.replaceAll("\n", "⋄");
         expr = [head, code, foot].join('⋄').replace(/⍝[^']*?⋄/g,'⋄');
@@ -80,19 +85,8 @@ async function executeAPL(head, code, foot, runner, lang, input) {
 
 
 // main program
-window.addEventListener('DOMContentLoaded', (event) => {
+window.addEventListener('DOMContentLoaded', (_e) => {
     // Globals:
-    const queryString = window.location.search;
-    console.log(queryString);
-    const urlParams = new URLSearchParams(queryString);
-    let sidebar = document.getElementById("sidebar"); //Options menu
-    let runner = "tryapl"; // default runner
-    let mode = "dfn"; //default mode
-    let tioLang = "apl-dyalog";
-    let funcName = "f";
-    let eType = "single";
-
-    // code input and output
     let code = document.getElementById("code");
     let head = document.getElementById("head");
     let foot = document.getElementById("foot");
@@ -101,28 +95,42 @@ window.addEventListener('DOMContentLoaded', (event) => {
     let inpdiv = document.getElementById("inp-div");
     let explain = document.getElementById("explain");
 
-    function errorCheckRunner(runner) {
-        if (runner === "tryAPL") { runner = "tryapl"; }
-        if (runner !== "tryapl" && runner !== "tio") {
-            console.error("The link has runner set to '" + runner + "'. Must be one of 'tryapl' or 'tio'. It defaulted to 'tryapl'.")
-            runner = "tryapl";
-        }
-        return runner;
-    }
-
-    // prefill items
+    const queryString = window.location.search;
     let d = x => decodeURIComponent(x);
     let cd = x => new TextDecoder("utf-8").decode(inflate(b64ToArr(d(x))));
-    head.value = cd(urlParams.get("h") || "");
-    code.value = cd(urlParams.get("c") || "");
-    foot.value = cd(urlParams.get("f") || "");
-    inp.value = cd(urlParams.get("i") || "");
-    runner = d(urlParams.get("r") || "tryapl");
-    runner = errorCheckRunner(runner);
-    tioLang = d(urlParams.get("l") || "apl-dyalog");
-    mode = d(urlParams.get("m") || "dfn");
+    if(queryString != "") { // prefill from URL
+        const urlParams = new URLSearchParams(queryString);
+        head.value = cd(urlParams.get("h") || "");
+        code.value = cd(urlParams.get("c") || "");
+        foot.value = cd(urlParams.get("f") || "");
+        inp.value = cd(urlParams.get("i") || "");
+        runner = d(urlParams.get("r") || "tryapl");
+        runner = errorCheckRunner(runner);
+        tioLang = d(urlParams.get("l") || "apl-dyalog");
+        mode = d(urlParams.get("m") || "dfn");
+       
+        funcName = d(urlParams.get("n") || "f");
+        document.getElementById("fname").value = funcName;
+        document.getElementById("count").innerHTML = code.value.length;
+        document.getElementById(runner).checked = true;
+    } else { // prefill from localStorage.
+        head.value = cd(localStorage.getItem("h") || "");
+        code.value = cd(localStorage.getItem("c") || "");
+        foot.value = cd(localStorage.getItem("f") || "");
+        inp.value = cd(localStorage.getItem("i") || "");
+        runner = d(localStorage.getItem("r") || "tryapl");
+        runner = errorCheckRunner(runner);
+        tioLang = d(localStorage.getItem("l") || "apl-dyalog");
+        mode = d(localStorage.getItem("m") || "dfn");
+       
+        funcName = d(localStorage.getItem("n") || "f");
+        document.getElementById("fname").value = funcName;
+        document.getElementById("count").innerHTML = code.value.length;
+        document.getElementById(runner).checked = true;
+    }
+
     if(mode == "train"){
-      document.getElementById("mode").innerHTML = "tacit function";
+        document.getElementById("mode").innerHTML = "tacit function";
     } else if (mode == "dfn") {
         document.getElementById("mode").innerHTML = "dfn";
     } else if (mode == "tradfn") {
@@ -131,10 +139,25 @@ window.addEventListener('DOMContentLoaded', (event) => {
         document.getElementById("output").style.color = "red";
         document.getElementById("output").innerHTML = "URL does not contain a valid mode.";
     }
-    funcName = d(urlParams.get("n") || "f");
-    document.getElementById("fname").value = funcName;
-    document.getElementById("count").innerHTML = code.value.length;
-    document.getElementById(runner).checked = true;
+
+    let sidebar = document.getElementById("sidebar"); //Options menu
+    // let runner = "tryapl"; // default runner
+    // let mode = "dfn"; //default mode
+    // let tioLang = "apl-dyalog";
+    // let funcName = "f";
+
+    // code input and output
+
+    function errorCheckRunner(runner) {
+        if (runner === "tryAPL") { runner = "tryapl"; }
+        if (runner !== "tryapl" && runner !== "tio") {
+            runner = "tryapl";
+            console.error("The link has runner set to '" + runner + "'. Must be one of 'tryapl' or 'tio'. It defaulted to 'tryapl'.")
+        }
+        return runner;
+    }
+
+
     if (runner === "tio") {
         inpdiv.style.display = "block";
     }
@@ -280,10 +303,9 @@ window.addEventListener('DOMContentLoaded', (event) => {
 
     document.getElementById("postify").addEventListener('click', (event) => {
         // let e = (x) => decodeURIComponent(x);
-        let e = (x) => x; // should have been encodeURI. bse64 is enough to put in the url
-        let ce = (x) => arrToB64(deflate(e(x)));
-        let hv=ce(head.value),cv=ce(code.value),fv=ce(foot.value);
-        console.log(hv,cv,fv);
+
+        // let hv=ce(head.value),cv=ce(code.value),fv=ce(foot.value);
+        // console.log(hv,cv,fv);
         let link = encodeURI(location.protocol + '//' + location.host + location.pathname + "?h=" + ce(head.value) + "&c=" + ce(code.value) + "&f=" + ce(foot.value) + "&i=" + ce(inp.value) + "&r=" + e(runner) + "&l=" + e(tioLang) + "&m=" + e(mode) + "&n=" + e(funcName));
         console.log(link);
         history.pushState({}, null, link);
@@ -410,4 +432,16 @@ A ${document.getElementById("mode").innerHTML} which ____.
         runBtn.style.cursor = "pointer";
         runBtn.style.pointerEvents = "auto";
     });
+
+    window.addEventListener("beforeunload", function(_e){    
+        localStorage.setItem("h",ce(head.value));
+        localStorage.setItem("c",ce(code.value));
+        localStorage.setItem("f",ce(foot.value));
+        localStorage.setItem("i",ce(inp.value));
+        localStorage.setItem("r",e(runner));
+        localStorage.setItem("l",e(tioLang));
+        localStorage.setItem("m",e(mode));
+        localStorage.setItem("n",e(funcName));
+     }, false);
+    
 });
